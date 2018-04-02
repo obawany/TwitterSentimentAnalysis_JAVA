@@ -353,5 +353,11 @@ public class ArffBuild {
 		//	instance.add(new Instance(1.0, valueArray));
 		}
 	}
+	public void saveArff() throws IOException {
+		ArffSaver saver = new ArffSaver();
+		saver.setInstances(instance);
+		saver.setFile(new File("data/semeval_twitter_data.arff"));
+		saver.writeBatch();
+	}
 
 }
