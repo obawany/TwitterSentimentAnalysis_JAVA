@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="CSI4107-A2/src"/>
+	<classpathentry kind="lib" path="/Applications/weka-3-9-2/weka.jar"/>
+	<classpathentry kind="output" path="CSI4107-A2/bin"/>
+</classpath>
