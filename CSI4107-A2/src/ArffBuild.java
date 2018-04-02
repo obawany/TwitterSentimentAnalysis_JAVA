@@ -47,16 +47,27 @@ public class ArffBuild {
 	File negative;
 	File file;
 	
-	ArrayList<String> atts;
-	ArrayList<String> attVals;
-	ArrayList<String> attEx;
-	ArrayList<String> attQu;
-	ArrayList<String> attHa;
-	ArrayList<String> attHEM;
-	ArrayList<String> attSEM;
+//	ArrayList<String> atts;
+//	ArrayList<String> attVals;
+//	ArrayList<String> attEx;
+//	ArrayList<String> attQu;
+//	ArrayList<String> attHa;
+//	ArrayList<String> attHEM;
+//	ArrayList<String> attSEM;
+	
+
+	FastVector atts;
+	FastVector attVals;
+	FastVector attEx;
+	FastVector attQu;
+	FastVector attHa;
+	FastVector attHEM;
+	FastVector attSEM;
+	
+	Instances instance;
 	
 	
-	public ArffBuilder() {
+	public ArffBuild() {
 		Set<String> stopWordsSet = new HashSet<String>();
 		Set<String> positiveSet = new HashSet<String>();
 		Set<String> negativeSet = new HashSet<String>();
@@ -80,14 +91,15 @@ public class ArffBuild {
 		File negative = new File("./Negative.txt");
 		File file = new File("./semeval_twitter_data.txt");
 
-		ArrayList<String> atts = new ArrayList<String>();
-		ArrayList<String> attVals = new ArrayList<String>();
-		ArrayList<String> attEx = new ArrayList<String>();
-		ArrayList<String> attQu = new ArrayList<String>();
-		ArrayList<String> attHa = new ArrayList<String>();
-		ArrayList<String> attHEM = new ArrayList<String>();
-		ArrayList<String> attSEM = new ArrayList<String>();
+//		ArrayList<String> atts = new ArrayList<String>();
+//		ArrayList<String> attVals = new ArrayList<String>();
+//		ArrayList<String> attEx = new ArrayList<String>();
+//		ArrayList<String> attQu = new ArrayList<String>();
+//		ArrayList<String> attHa = new ArrayList<String>();
+//		ArrayList<String> attHEM = new ArrayList<String>();
+//		ArrayList<String> attSEM = new ArrayList<String>();
 
+		
 
 	}
 	public File removeStopWords() throws IOException{
@@ -231,52 +243,115 @@ public class ArffBuild {
 		return file;
 	}
 	public void arffFile() {
-		attVals.add("positive");
-		attVals.add("negative");
-		attVals.add("neutral");
-		attVals.add("objective");
-		//FIX THIS
-		//atts.add(new Attribute("OpinionCategory", attVals));
-		
-		attEx.add("Y");
-		attEx.add("N");
-		//FIX THIS
-		//atts.add(new Attribute("ExclamationMark", attEx));
-		
-		attQu.add("Y");
-		attQu.add("N");
-		//FIX THIS
-		//atts.addElement(new Attribute("QuestionMark", attQu));
-		
-		attHa.add("Y");
-		attHa.add("N");
-		//FIX THIS
-		//atts.addElement(new Attribute("HashTag", attHa));
-		
+//		attVals.add("positive");
+//		attVals.add("negative");
+//		attVals.add("neutral");
+//		attVals.add("objective");
+//		//FIX THIS
+//		//atts.add(new Attribute("OpinionCategory", attVals));
+//		
+//		attEx.add("Y");
+//		attEx.add("N");
+//		//FIX THIS
+//		//atts.add(new Attribute("ExclamationMark", attEx));
+//		
+//		attQu.add("Y");
+//		attQu.add("N");
+//		//FIX THIS
+//		//atts.addElement(new Attribute("QuestionMark", attQu));
+//		
+//		attHa.add("Y");
+//		attHa.add("N");
+//		//FIX THIS
+//		//atts.addElement(new Attribute("HashTag", attHa));
+//		
+//
+//		attHEM.add("Y");
+//		attHEM.add("N");
+//
+//		attSEM.add("Y");
+//		attSEM.add("N");
+//		//FIX THIS
+//		//atts.addElement(new Attribute("PositiveEmoticon", attHEM));
+//		//atts.addElement(new Attribute("NegativeEmoticon", attSEM));
+//		
+//		// FIX THIS
+//		//atts.add(new Attribute("PositiveWords"));
+//		
+//		// FIX THIS
+//		//atts.add(new Attribute("NegativeWords"));
+//		
+//		for (String word : vocabVector) {
+//			// FIX THIS
+//		//	atts.add(new Attribute(word));
+//		}
+//
+//		//instance = new Instances("Opinion", atts, 0);
 
-		attHEM.add("Y");
-		attHEM.add("N");
-
-		attSEM.add("Y");
-		attSEM.add("N");
-		//FIX THIS
-		//atts.addElement(new Attribute("PositiveEmoticon", attHEM));
-		//atts.addElement(new Attribute("NegativeEmoticon", attSEM));
+		atts = new FastVector();
 		
-		// FIX THIS
-		//atts.add(new Attribute("PositiveWords"));
+		attVals = new FastVector();
+		attVals.addElement("positive");
+		attVals.addElement("negative");
+		attVals.addElement("neutral");
+		attVals.addElement("objective");
+		atts.addElement(new Attribute("OpinionCategory", attVals));
 		
-		// FIX THIS
-		//atts.add(new Attribute("NegativeWords"));
+		attEx = new FastVector();
+		attEx.addElement("Y");
+		attEx.addElement("N");
+		atts.addElement(new Attribute("ExclamationMark", attEx));
+		
+		attQu = new FastVector();
+		attQu.addElement("Y");
+		attQu.addElement("N");
+		atts.addElement(new Attribute("QuestionMark", attQu));
+		
+		attHa = new FastVector();
+		attHa.addElement("Y");
+		attHa.addElement("N");
+		atts.addElement(new Attribute("HashTag", attHa));
+		
+		attHEM = new FastVector();
+		attHEM.addElement("Y");
+		attHEM.addElement("N");
+		attSEM = new FastVector();
+		attSEM.addElement("Y");
+		attSEM.addElement("N");
+		atts.addElement(new Attribute("PositiveEmoticon", attHEM));
+		atts.addElement(new Attribute("NegativeEmoticon", attSEM));
+		
+		atts.addElement(new Attribute("PositiveWords"));
+		
+		atts.addElement(new Attribute("NegativeWords"));
 		
 		for (String word : vocabVector) {
-			// FIX THIS
-		//	atts.add(new Attribute(word));
+			atts.addElement(new Attribute(word));
 		}
 
-		// 2. create Instances object
-		//instance = new Instances("Opinion", atts, 0);
+		instance = new Instances("Opinion", atts, 0);
+	}
+	public void fillWithData() {
+		for (String tweetIDKey : bagOfWords.keySet()) {			
+			Map<String, Integer> sentence = bagOfWords.get(tweetIDKey);
+			
+			List<Double> values = Arrays.asList(
+					(double) attVals.indexOf(opinionMap.get(tweetIDKey)), // nominal opinion
+					(double) attEx.indexOf(exclamationMap.get(tweetIDKey) ? "Y" : "N"), // set nominal exclamation mark
+					(double) attQu.indexOf(questionMap.get(tweetIDKey) ? "Y" : "N"), // set nominal question mark
+					(double) attHa.indexOf(hashtagMap.get(tweetIDKey) ? "Y" : "N"), // set nominal hashtag
+					(double) attHEM.indexOf(happyEmoteMap.get(tweetIDKey) ? "Y" : "N"),
+					(double) attSEM.indexOf(sadEmoteMap.get(tweetIDKey) ? "Y" : "N"),
+					(double) posMap.get(tweetIDKey),
+					(double) negMap.get(tweetIDKey)
+			);
 
+			List<Double> vocab = vocabVector.stream().map(key -> (double) (sentence.containsKey(key) ? sentence.get(key) : 0))
+					.collect(Collectors.toList());
+			List<Double> union = Stream.concat(values.stream(), vocab.stream()).collect(Collectors.toList());
+			double[] valueArray = union.stream().mapToDouble(d -> d).toArray();
+		//	instance.add(new Instance(1.0, valueArray));
+		}
 	}
 
 }
