@@ -359,5 +359,18 @@ public class ArffBuild {
 		saver.setFile(new File("data/semeval_twitter_data.arff"));
 		saver.writeBatch();
 	}
+	public static void main(String args[]) throws Exception {
+		ArffBuild arffFile = new ArffBuild();
+		
+//		arffFile.removeStopWords();
+//		arffFile.positiveSetAndPrefixes();
+//		arffFile.negativeSetAndPrefixes();
+//		arffFile.usingEmoticons();
+//		arffFile.rareWords();
+//		arffFile.bagOfWords();
+//		arffFile.arffFile();
+//		arffFile.fillWithData();
+//		arffFile.saveArff();
+	}
 
 }
