@@ -37,9 +37,9 @@ public class ArffBuild {
 	HashMap<String, Boolean> questionMap;
 	HashMap<String, Boolean> hashtagMap;
 	HashMap<String, Boolean> happyEmoteMap;
-	HashMap<String, Boolean> sadEmoteMap;
-	HashMap<String, Integer> posMap;
-	HashMap<String, Integer> negMap;
+	HashMap<String, Boolean> EmoteMap;
+	HashMap<String, Integer> positive;
+	HashMap<String, Integer> negative;
 	Vector<String> vocabVector;
 	
 	File stopWords;
@@ -48,21 +48,21 @@ public class ArffBuild {
 	File file;
 	
 //	ArrayList<String> atts;
-//	ArrayList<String> attVals;
-//	ArrayList<String> attEx;
-//	ArrayList<String> attQu;
-//	ArrayList<String> attHa;
-//	ArrayList<String> attHEM;
-//	ArrayList<String> attSEM;
+//	ArrayList<String> attributeValues;
+//	ArrayList<String> excalmation;
+//	ArrayList<String> question;
+//	ArrayList<String> hashtag;
+//	ArrayList<String> happy;
+//	ArrayList<String> sad;
 	
 
 	FastVector atts;
-	FastVector attVals;
-	FastVector attEx;
-	FastVector attQu;
-	FastVector attHa;
-	FastVector attHEM;
-	FastVector attSEM;
+	FastVector attributeValues;
+	FastVector excalmation;
+	FastVector question;
+	FastVector hashtag;
+	FastVector happy;
+	FastVector sad;
 	
 	Instances instance;
 	
@@ -81,9 +81,9 @@ public class ArffBuild {
 		HashMap<String, Boolean> questionMap = new HashMap<String, Boolean>();
 		HashMap<String, Boolean> hashtagMap = new HashMap<String, Boolean>();
 		HashMap<String, Boolean> happyEmoteMap = new HashMap<String, Boolean>();
-		HashMap<String, Boolean> sadEmoteMap = new HashMap<String, Boolean>();
-		HashMap<String, Integer> posMap = new HashMap<String, Integer>();
-		HashMap<String, Integer> negMap = new HashMap<String, Integer>();
+		HashMap<String, Boolean> EmoteMap = new HashMap<String, Boolean>();
+		HashMap<String, Integer> positive = new HashMap<String, Integer>();
+		HashMap<String, Integer> negative = new HashMap<String, Integer>();
 		Vector<String> vocabVector = new Vector<String>();
 		
 		File stopWords = new File("./StopWords.txt");
@@ -92,16 +92,30 @@ public class ArffBuild {
 		File file = new File("./semeval_twitter_data.txt");
 
 //		ArrayList<String> atts = new ArrayList<String>();
-//		ArrayList<String> attVals = new ArrayList<String>();
-//		ArrayList<String> attEx = new ArrayList<String>();
-//		ArrayList<String> attQu = new ArrayList<String>();
-//		ArrayList<String> attHa = new ArrayList<String>();
-//		ArrayList<String> attHEM = new ArrayList<String>();
-//		ArrayList<String> attSEM = new ArrayList<String>();
+//		ArrayList<String> attributeValues = new ArrayList<String>();
+//		ArrayList<String> excalmation = new ArrayList<String>();
+//		ArrayList<String> question = new ArrayList<String>();
+//		ArrayList<String> hashtag = new ArrayList<String>();
+//		ArrayList<String> happy = new ArrayList<String>();
+//		ArrayList<String> sad = new ArrayList<String>();
 
 		
 
 	}
+	public static void main(String args[]) throws Exception {
+		ArffBuild arffFile = new ArffBuild();
+		arffFile.removeStopWords();
+		arffFile.positiveSetAndPrefixes();
+		arffFile.negativeSetAndPrefixes();
+		arffFile.usingEmoticons();
+		arffFile.rareWords();
+		arffFile.bagOfWords();
+		arffFile.arffFile();
+		arffFile.fillWithData();
+		arffFile.saveArff();
+	}
+	
+	
 	public File removeStopWords() throws IOException{
 		try (BufferedReader br = new BufferedReader(new FileReader(stopWords))) {
 			for (String line; (line = br.readLine()) != null;) {
@@ -138,7 +152,7 @@ public class ArffBuild {
 	}
 	public void usingEmoticons() throws IOException{
 		Pattern happyEmoticons = Pattern.compile(".*(:\\)|;\\)|\\(:|\\(;|♥|♡|☺).*");
-		Pattern sadEmoticons = Pattern.compile(".*(:\\(|;\\(|\\):|\\);|\\>:\\||\\|:\\<|:@).*");
+		Pattern Emoticons = Pattern.compile(".*(:\\(|;\\(|\\):|\\);|\\>:\\||\\|:\\<|:@).*");
 		
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 			for (String line; (line = br.readLine()) != null;) {
@@ -154,7 +168,7 @@ public class ArffBuild {
 				questionMap.put(tweetID, sentence.contains("?"));
 				hashtagMap.put(tweetID, sentence.contains("#"));
 				happyEmoteMap.put(tweetID, happyEmoticons.matcher(sentence).matches());
-				sadEmoteMap.put(tweetID, sadEmoticons.matcher(sentence).matches());
+				EmoteMap.put(tweetID, Emoticons.matcher(sentence).matches());
 				String[] words = sentence.split(" ");
 
 				for (String word : words) {
@@ -235,45 +249,45 @@ public class ArffBuild {
 				if (negativeCount == 0) {
 					positiveCount = positiveCount * 2 + 1;
 				}
-				posMap.put(tweetID, positiveCount);
-				negMap.put(tweetID, negativeCount);
+				positive.put(tweetID, positiveCount);
+				negative.put(tweetID, negativeCount);
 				bagOfWords.put(tweetID, wordsMap);
 			}
 		}
 		return file;
 	}
 	public void arffFile() {
-//		attVals.add("positive");
-//		attVals.add("negative");
-//		attVals.add("neutral");
-//		attVals.add("objective");
+//		attributeValues.add("positive");
+//		attributeValues.add("negative");
+//		attributeValues.add("neutral");
+//		attributeValues.add("objective");
 //		//FIX THIS
-//		//atts.add(new Attribute("OpinionCategory", attVals));
+//		//atts.add(new Attribute("OpinionCategory", attributeValues));
 //		
-//		attEx.add("Y");
-//		attEx.add("N");
+//		excalmation.add("Y");
+//		excalmation.add("N");
 //		//FIX THIS
-//		//atts.add(new Attribute("ExclamationMark", attEx));
+//		//atts.add(new Attribute("ExclamationMark", excalmation));
 //		
-//		attQu.add("Y");
-//		attQu.add("N");
+//		question.add("Y");
+//		question.add("N");
 //		//FIX THIS
-//		//atts.addElement(new Attribute("QuestionMark", attQu));
+//		//atts.addElement(new Attribute("QuestionMark", question));
 //		
-//		attHa.add("Y");
-//		attHa.add("N");
+//		hashtag.add("Y");
+//		hashtag.add("N");
 //		//FIX THIS
-//		//atts.addElement(new Attribute("HashTag", attHa));
+//		//atts.addElement(new Attribute("HashTag", hashtag));
 //		
 //
-//		attHEM.add("Y");
-//		attHEM.add("N");
+//		happy.add("Y");
+//		happy.add("N");
 //
-//		attSEM.add("Y");
-//		attSEM.add("N");
+//		sad.add("Y");
+//		sad.add("N");
 //		//FIX THIS
-//		//atts.addElement(new Attribute("PositiveEmoticon", attHEM));
-//		//atts.addElement(new Attribute("NegativeEmoticon", attSEM));
+//		//atts.addElement(new Attribute("PositiveEmoticon", happy));
+//		//atts.addElement(new Attribute("NegativeEmoticon", sad));
 //		
 //		// FIX THIS
 //		//atts.add(new Attribute("PositiveWords"));
@@ -290,36 +304,36 @@ public class ArffBuild {
 
 		atts = new FastVector();
 		
-		attVals = new FastVector();
-		attVals.addElement("positive");
-		attVals.addElement("negative");
-		attVals.addElement("neutral");
-		attVals.addElement("objective");
-		atts.addElement(new Attribute("OpinionCategory", attVals));
+		attributeValues = new FastVector();
+		attributeValues.addElement("positive");
+		attributeValues.addElement("negative");
+		attributeValues.addElement("neutral");
+		attributeValues.addElement("objective");
+		atts.addElement(new Attribute("OpinionCategory", attributeValues));
 		
-		attEx = new FastVector();
-		attEx.addElement("Y");
-		attEx.addElement("N");
-		atts.addElement(new Attribute("ExclamationMark", attEx));
+		excalmation = new FastVector();
+		excalmation.addElement("Y");
+		excalmation.addElement("N");
+		atts.addElement(new Attribute("ExclamationMark", excalmation));
 		
-		attQu = new FastVector();
-		attQu.addElement("Y");
-		attQu.addElement("N");
-		atts.addElement(new Attribute("QuestionMark", attQu));
+		question = new FastVector();
+		question.addElement("Y");
+		question.addElement("N");
+		atts.addElement(new Attribute("QuestionMark", question));
 		
-		attHa = new FastVector();
-		attHa.addElement("Y");
-		attHa.addElement("N");
-		atts.addElement(new Attribute("HashTag", attHa));
+		hashtag = new FastVector();
+		hashtag.addElement("Y");
+		hashtag.addElement("N");
+		atts.addElement(new Attribute("HashTag", hashtag));
 		
-		attHEM = new FastVector();
-		attHEM.addElement("Y");
-		attHEM.addElement("N");
-		attSEM = new FastVector();
-		attSEM.addElement("Y");
-		attSEM.addElement("N");
-		atts.addElement(new Attribute("PositiveEmoticon", attHEM));
-		atts.addElement(new Attribute("NegativeEmoticon", attSEM));
+		happy = new FastVector();
+		happy.addElement("Y");
+		happy.addElement("N");
+		sad = new FastVector();
+		sad.addElement("Y");
+		sad.addElement("N");
+		atts.addElement(new Attribute("PositiveEmoticon", happy));
+		atts.addElement(new Attribute("NegativeEmoticon", sad));
 		
 		atts.addElement(new Attribute("PositiveWords"));
 		
@@ -336,41 +350,27 @@ public class ArffBuild {
 			Map<String, Integer> sentence = bagOfWords.get(tweetIDKey);
 			
 			List<Double> values = Arrays.asList(
-					(double) attVals.indexOf(opinionMap.get(tweetIDKey)), // nominal opinion
-					(double) attEx.indexOf(exclamationMap.get(tweetIDKey) ? "Y" : "N"), // set nominal exclamation mark
-					(double) attQu.indexOf(questionMap.get(tweetIDKey) ? "Y" : "N"), // set nominal question mark
-					(double) attHa.indexOf(hashtagMap.get(tweetIDKey) ? "Y" : "N"), // set nominal hashtag
-					(double) attHEM.indexOf(happyEmoteMap.get(tweetIDKey) ? "Y" : "N"),
-					(double) attSEM.indexOf(sadEmoteMap.get(tweetIDKey) ? "Y" : "N"),
-					(double) posMap.get(tweetIDKey),
-					(double) negMap.get(tweetIDKey)
+					(double) attributeValues.indexOf(opinionMap.get(tweetIDKey)), 
+					(double) excalmation.indexOf(exclamationMap.get(tweetIDKey) ? "Y" : "N"),
+					(double) question.indexOf(questionMap.get(tweetIDKey) ? "Y" : "N"), 
+					(double) hashtag.indexOf(hashtagMap.get(tweetIDKey) ? "Y" : "N"), 
+					(double) happy.indexOf(happyEmoteMap.get(tweetIDKey) ? "Y" : "N"),
+					(double) sad.indexOf(EmoteMap.get(tweetIDKey) ? "Y" : "N"),
+					(double) positive.get(tweetIDKey),
+					(double) negative.get(tweetIDKey)
 			);
 
 			List<Double> vocab = vocabVector.stream().map(key -> (double) (sentence.containsKey(key) ? sentence.get(key) : 0))
 					.collect(Collectors.toList());
 			List<Double> union = Stream.concat(values.stream(), vocab.stream()).collect(Collectors.toList());
 			double[] valueArray = union.stream().mapToDouble(d -> d).toArray();
-		//	instance.add(new Instance(1.0, valueArray));
 		}
 	}
 	public void saveArff() throws IOException {
 		ArffSaver saver = new ArffSaver();
 		saver.setInstances(instance);
-		saver.setFile(new File("data/semeval_twitter_data.arff"));
+		saver.setFile(new File("/semeval_twitter_data.arff"));
 		saver.writeBatch();
-	}
-	public static void main(String args[]) throws Exception {
-		ArffBuild arffFile = new ArffBuild();
-		
-//		arffFile.removeStopWords();
-//		arffFile.positiveSetAndPrefixes();
-//		arffFile.negativeSetAndPrefixes();
-//		arffFile.usingEmoticons();
-//		arffFile.rareWords();
-//		arffFile.bagOfWords();
-//		arffFile.arffFile();
-//		arffFile.fillWithData();
-//		arffFile.saveArff();
 	}
 
 }
